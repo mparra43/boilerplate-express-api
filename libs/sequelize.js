@@ -3,33 +3,16 @@
 const { Sequelize } = require('sequelize');
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + './../config/config.js')['development'];
-const { Chat, ChatSchema } = require('../database/models/chat.model');
-const { Company, CompanySchema } = require('../database/models/company.model');
-const { Credit, CreditSchema } = require('../database/models/credit.model');
-const { CreditRequest, CreditRequestSchema } = require('../database/models/credit.request.model');
-const { Employee, EmployeeSchema } = require('../database/models/employee.model');
-const { Message, MessageSchema } = require('../database/models/note.model');
 const { User, UserSchema } = require('../database/models/user.model');
-const { Document, DocumentSchema } = require('../database/models/document.model')
+const { Note, NoteSchema } = require('../database/models/note.model')
 
 const setupModels =(sequelize) =>{
-  Chat.init(ChatSchema, Chat.config(sequelize));
-  Company.init(CompanySchema, Company.config(sequelize));
-  Credit.init(CreditSchema, Credit.config(sequelize));
-  CreditRequest.init(CreditRequestSchema, CreditRequest.config(sequelize));
-  Employee.init(EmployeeSchema, Employee.config(sequelize));
-  Message.init( MessageSchema,  Message.config(sequelize));
-  Document.init(DocumentSchema, Document.config(sequelize));
+  User.init(UserSchema, User.config(sequelize));
+  Note.init(NoteSchema, Note.config(sequelize));
+
+  User.associate(sequelize.models);
+  Note.associate(sequelize.models);
  
-
-  Chat.associate(sequelize.models);
-  Company.associate(sequelize.models);
-  Credit.associate(sequelize.models);
-  CreditRequest.associate(sequelize.models);
-  Employee.associate(sequelize.models);
-  Message.associate(sequelize.models);
-  Document.associate(sequelize.models);
-
 }
 
 const USER = encodeURIComponent(config.username);
@@ -40,9 +23,9 @@ const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   logging: false,
 });
- setupModels(sequelize);
+setupModels(sequelize);
 
 // FIXME - THE DELEME ME ON PRODUCTION
-//  sequelize.sync();
+ //sequelize.sync();
 
 module.exports = sequelize;

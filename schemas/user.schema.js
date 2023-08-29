@@ -13,10 +13,13 @@ const createUserSchema = Joi.object({
   guest_session_id: guestSessionId.required()
 });
 
-
+const loginUserSchema = Joi.object({
+  email: email.required(),
+  password: password.required(),
+});
 
 const getUserSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createUserSchema, getUserSchema }
+module.exports = { createUserSchema, getUserSchema , loginUserSchema}

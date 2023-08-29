@@ -1,5 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
-const {  NOTES_TABLE } = require('../tables');
+const {  NOTES_TABLE, USER_TABLE } = require('../tables');
 
 const NoteSchema = {
   id: {
@@ -9,13 +9,13 @@ const NoteSchema = {
     type: DataTypes.INTEGER,
   },
 
-  session_id: {
-    field: 'session_id',
+  userId: {
+    field: 'user_id',
     allowNull: false,
     type: DataTypes.INTEGER,
     references: {
       model: USER_TABLE,
-      key: 'session_id'
+      key: 'id'
     },
     onUpdate: 'CASCADE',
     onDelete: 'SET NULL'
@@ -49,7 +49,7 @@ const NoteSchema = {
 
 class Note extends Model {
   static associate(models) {
-    this.belongsTo(models.Chat, { as: 'chat' });
+     this.belongsTo(models.User, { as: 'user' });
   }
 
   static config(sequelize) {

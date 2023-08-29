@@ -1,74 +1,55 @@
 const express = require('express');
 
-// const UserService = require('./../services/user.service');
+ const UserService = require('./../services/user.service');
 const validatorHandler = require('./../middlewares/validator.handler');
-const { updateUserSchema, createUserSchema, getUserSchema } = require('./../schemas/user.schema');
+const { createUserSchema,  loginUserSchema, } = require('./../schemas/user.schema');
 
 const router = express.Router();
-// const service = new UserService();
+ const service = new UserService();
 
-router.get('/', async (req, res, next) => {
-  try {
-    // const categories = await service.find();
-    // res.json(categories);
-  } catch (error) {
-    next(error);
-  }
-});
 
-router.get('/:id',
-  validatorHandler(getUserSchema, 'params'),
+router.get('/renew',
+validateJwt(req, res, next),
   async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const category = await service.findOne(id);
-      res.json(category);
+      const token = await service.validateToken(req.params);
+      res.json(token);
     } catch (error) {
       next(error);
     }
   }
 );
+
+
+router.post('/login',
+  validatorHandler(loginUserSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const user = await service.login(body);
+       res.status(201).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 
 router.post('/',
   validatorHandler(createUserSchema, 'body'),
   async (req, res, next) => {
     try {
       const body = req.body;
-      // const newCategory = await service.create(body);
-      // res.status(201).json(newCategory);
+      const newUser = await service.create(body);
+       res.status(201).json(newUser);
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.patch('/:id',
-  validatorHandler(getUserSchema, 'params'),
-  validatorHandler(updateUserSchema, 'body'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const body = req.body;
-      // const category = await service.update(id, body);
-      // res.json(category);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
-router.delete('/:id',
-  validatorHandler(getUserSchema, 'params'),
-  async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      await service.delete(id);
-      res.status(201).json({id});
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+
 
 module.exports = router;
 

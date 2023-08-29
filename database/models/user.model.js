@@ -13,9 +13,13 @@ const UserSchema = {
   },
   session_id: {
     allowNull: false,
-    autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER
+    type: DataTypes.STRING,
+  },
+  guest_session_id: {
+    allowNull: false,
+    primaryKey: true,
+    type: DataTypes.STRING,
   },
   email: {
     allowNull: false,
@@ -29,20 +33,20 @@ const UserSchema = {
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'create_at',
     defaultValue: Sequelize.NOW
   },
   updatedAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'updated_at',
     defaultValue: Sequelize.NOW
   }
 }
 
 class User extends Model {
-  static associate() {
-    // associate
+  static associate(models) {
+    this.hasMany(models.Note, {
+      as: 'note', foreignKey: 'userId'
+    });
   }
 
   static config(sequelize) {
