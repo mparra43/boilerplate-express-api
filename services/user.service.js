@@ -38,14 +38,11 @@ class UserService {
     const { email, password } = data;
     try {
       const user = await this.findOneByEmail(email);
-      console.log(user)
       if (user !== null) {
         const validPassword = bcryptjs.compareSync(password, user.password);
-        console.log(validPassword)
         if (!validPassword) { throw boom.notFound('Invalid data') };
         const token = await generateJWT(user.id, user.session_id);
-        console.log(token)
-        return token
+        return {token, session_id: user.session_id, guest_session_id: user.guest_session_id}
       } else {
         { throw boom.notFound('permission denied') };
       }

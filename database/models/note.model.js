@@ -8,7 +8,11 @@ const NoteSchema = {
     primaryKey: true,
     type: DataTypes.INTEGER,
   },
-
+  session_id: {
+    allowNull: false,
+    primaryKey: true,
+    type: DataTypes.STRING,
+  },
   userId: {
     field: 'user_id',
     allowNull: false,
@@ -23,7 +27,7 @@ const NoteSchema = {
   movieId: {
     field: 'movie_id',
     allowNull: false,
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     unique: true,
   },
 
@@ -35,14 +39,12 @@ const NoteSchema = {
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'create_at',
     defaultValue: Sequelize.NOW,
   },
 
   updatedAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'updated_at',
     defaultValue: Sequelize.NOW,
   },
 };
